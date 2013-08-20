@@ -17,8 +17,8 @@ public class Main {
 
 	//パラメータ設定
 	int mSize = 3;
-	int maxNum = 3;
-	int minNum = 5;
+	int maxNum = 4;
+	int minNum = 3;
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
 
@@ -53,6 +53,8 @@ public class Main {
 			mh = mSize/2;
 			int max2d[][] = new int[h][w];
 			MaxFilter(src2d,max2d,maxNum);
+			int min2d[][] = new int[h][w];
+			MinFilter(max2d,min2d,minNum);
 
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
@@ -67,8 +69,41 @@ public class Main {
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
+		}
+	}
 
 
+	private void MinFilter(int[][] max2d, int[][] min2d, int num) {
+
+		int tmp2d[][] = new int[h][w];
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x < w; x++){
+				tmp2d[y][x] = max2d[y][x];
+			}
+		}
+
+		for(int i = 0; i < num; i++){
+			for(int y = mh; y < h-mh; y++){
+				for(int x = mh; x < w-mh; x++){
+
+					int min = Integer.MAX_VALUE;
+
+					for(int my = -mh; my <= mh; my++){
+						for(int mx = -mh; mx <= mh; mx++){
+							if(my == 0 && mx ==0)continue;
+							if(tmp2d[y+my][x+mx] < min){
+								min = tmp2d[y+my][x+mx];
+							}
+						}
+					}
+					min2d[y][x] = min;
+				}
+			}
+			for(int y = mh; y < h-mh; y++){
+				for(int x = mh; x < w-mh; x++){
+					tmp2d[y][x] = min2d[y][x];
+				}
+			}
 		}
 	}
 
@@ -80,7 +115,7 @@ public class Main {
 				tmp2d[y][x] = src2d[y][x];
 			}
 		}
-		
+
 		for(int i = 0; i < num; i++){
 			for(int y = mh; y < h-mh; y++){
 				for(int x = mh; x < w-mh; x++){
