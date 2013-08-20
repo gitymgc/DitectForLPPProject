@@ -30,7 +30,7 @@ public class LaplacianFilterForThis {
 					}
 				}
 				if(tmp > gra2d[y][x]){
-					dst2d[y][x] = 255;
+					dst2d[y][x] = 1;
 				}else{
 					dst2d[y][x] = 0;
 				}
