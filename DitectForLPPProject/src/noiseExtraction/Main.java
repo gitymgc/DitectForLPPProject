@@ -7,6 +7,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import main.LaplacianFilterForThis;
+
 public class Main {
 
 	public static void main(String[] args)throws Exception{
@@ -17,8 +19,9 @@ public class Main {
 
 	//パラメータ設定
 	int mSize = 3;
-	int maxNum = 4;
-	int minNum = 3;
+	int maxNum = 13;
+	int minNum = 10;
+	int expNum = 3;
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
 
@@ -56,6 +59,37 @@ public class Main {
 			int min2d[][] = new int[h][w];
 			MinFilter(max2d,min2d,minNum);
 
+			//エッジ検出
+			int edge2d[][] = new int[h][w];
+			LaplacianFilterForThis.exec(srcImg, min2d, edge2d, mSize);
+
+			//しきい値候補決定
+			int preBord2d[][] = new int[h][w];
+			getCandidateBorder(preBord2d,edge2d,min2d);
+
+			//各画素ごとのしきい値を決定
+			mh = 10;
+			int bord2d[][] =  new int[h][w];
+			getBoｒderLine(preBord2d,bord2d);
+
+			//二値化実行
+			int bin2d[][] = new int[h][w];
+			for(int y = 0; y < h; y ++){
+				for(int x = 0; x < w; x++){
+					if(min2d[y][x] > bord2d[y][x]){
+						bin2d[y][x] = 1;
+					}
+				}
+			}
+
+			//膨張処理
+			Expansion(bin2d,expNum);
+
+
+
+
+
+
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -65,10 +99,43 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-					dstBuf.setElem(y*w+x, max2d[y][x]);
+					dstBuf.setElem(y*w+x, bin2d[y][x]);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
+		}
+	}
+
+
+	private void Expansion(int[][] bin2d, int num) {
+
+		int tmp2d[][] = new int[h][w];
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x < w; x++){
+				tmp2d[y][x] = bin2d[y][x];
+			}
+		}
+
+		for(int i = 0; i < num; i++){
+			for(int y = mh; y < h-mh; y++){
+				for(int x = mh; x < w-mh; x++){
+					int sum = 0;
+					for(int my = -mh; my <= mh; my++){
+						for(int mx = -mh; mx <= mh; mx++){
+							if(my == 0 && mx ==0)continue;
+							sum += tmp2d[y][x];
+						}
+					}
+					if(sum > 0){
+						bin2d[y][x] = 1;
+					}
+				}
+			}
+			for(int y = mh; y < h-mh; y++){
+				for(int x = mh; x < w-mh; x++){
+					tmp2d[y][x] = bin2d[y][x];
+				}
+			}
 		}
 	}
 
@@ -139,6 +206,49 @@ public class Main {
 				}
 			}
 		}
+	}
+
+	private void getCandidateBorder(int[][] preBord2d, int[][] edge2d, int[][] min2d) {
+		for(int y = mh; y < h-mh; y++){
+			for(int x = mh; x < w-mh; x++){
+				if(edge2d[y][x] == 1){
+					int min = Integer.MAX_VALUE;
+					for(int my = -mh; my <= mh; my++){
+						for(int mx = -mh; mx <= mh; mx++){
+							if(my == 0 && mx == 0)continue;
+							if(min2d[y+my][x+mx] < min){
+								min = min2d[y+my][x+mx];
+							}
+						}
+					}
+					preBord2d[y][x] = (min2d[y][x] + min)/2;
+				}else{
+					preBord2d[y][x] = 0;
+				}
+			}
+		}
+	}
+
+	private void getBoｒderLine(int[][] preBord2d, int[][] bord2d) {
+		for(int y = mh; y < h-mh; y++){
+			for(int x = mh; x < w-mh; x++){
+				int sum = 0;
+				int cnt = 0;
+				for(int my = -mh; my <= mh; my++){
+					for(int mx = -mh; mx <= mh; mx++){
+						if(my == 0 && mx == 0)continue;
+						if(preBord2d[y+my][x+mx] > 0){
+							sum += preBord2d[y+my][x+mx];
+							cnt++;
+						}
+					}
+				}
+				if(cnt != 0){
+					bord2d[y][x] = (sum/cnt);
+				}
+			}
+		}
+
 	}
 }
 
