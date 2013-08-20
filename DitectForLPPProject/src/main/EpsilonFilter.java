@@ -23,7 +23,7 @@ public class EpsilonFilter {
 
 					for(int my = -mh; my <= mh; my++){
 						for(int mx = -mh; mx <= mh; mx++){
-							
+
 							//真ん中飛ばす
 							if(my == 0 && mx == 0)continue;
 							if(Math.abs(gra2d[y][x] - gra2d[y+my][x+mx]) <= e){
@@ -34,6 +34,10 @@ public class EpsilonFilter {
 						}
 					}
 					dst2d[y][x] = (int)((double)tmp/q);
+				}
+			}
+			for(int y = mh; y <h-mh; y++){
+				for(int x = mh; x < w-mh; x++){
 					gra2d[y][x] = dst2d[y][x];
 				}
 			}
