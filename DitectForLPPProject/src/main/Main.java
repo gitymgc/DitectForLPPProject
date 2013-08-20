@@ -21,7 +21,8 @@ public class Main {
 
 		int h;
 		int w;
-		int mh;
+		int mh = mSize/2;
+		int mhForBin = 10;
 		
 		public void exec() throws Exception{
 
@@ -57,12 +58,10 @@ public class Main {
 				LaplacianFilterForThis.exec(srcImg,smth2d,edge2d,mSize);
 
 				//しきい値候補決定
-				mh = mSize/2;
 				int preBord2d[][] = new int[h][w];
 				getCandidateBorder(preBord2d,edge2d,smth2d);
 
 				//各画素ごとのしきい値を決定
-				mh = 10;
 				int bord2d[][] =  new int[h][w];
 				getBoｒderLine(preBord2d,bord2d);
 
@@ -70,7 +69,7 @@ public class Main {
 				int bin2d[][] = new int[h][w];
 				for(int y = 0; y < h; y ++){
 					for(int x = 0; x < w; x++){
-						if(smth2d[y][x] > bord2d[y][x]){
+						if(smth2d[y][x] < bord2d[y][x]){
 							bin2d[y][x] = 255;
 						}
 					}
@@ -93,12 +92,12 @@ public class Main {
 		}
 
 		private void getBoｒderLine(int[][] preBord2d, int[][] bord2d) {
-			for(int y = mh; y < h-mh; y++){
-				for(int x = mh; x < w-mh; x++){
+			for(int y = mhForBin; y < h-mhForBin; y++){
+				for(int x = mhForBin; x < w-mhForBin; x++){
 					int sum = 0;
 					int cnt = 0;
-					for(int my = -mh; my <= mh; my++){
-						for(int mx = -mh; mx <= mh; mx++){
+					for(int my = -mhForBin; my <= mhForBin; my++){
+						for(int mx = -mhForBin; mx <= mhForBin; mx++){
 							if(my == 0 && mx == 0)continue;
 							if(preBord2d[y+my][x+mx] > 0){
 								sum += preBord2d[y+my][x+mx];
