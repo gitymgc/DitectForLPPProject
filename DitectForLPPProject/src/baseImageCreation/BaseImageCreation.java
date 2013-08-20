@@ -18,7 +18,7 @@ public class BaseImageCreation {
 	static int mh;
 	static int mhForBin;
 	/**
-	 * 
+	 * ベース画像作成
 	 * @param param
 	 * @param srcImg
 	 * @param src2d
@@ -27,9 +27,11 @@ public class BaseImageCreation {
 	 */
 	public static void exec(Parameter param,BufferedImage srcImg,int src2d[][],int bin2d[][]) throws Exception{
 
-		mSize = param.mSize;
+		
 		e = param.epsilon;
 		N = param.smthNum;
+		
+		mSize = param.mSize;
 		mh = param.mh;
 		mhForBin = param.mhForBin;
 		
