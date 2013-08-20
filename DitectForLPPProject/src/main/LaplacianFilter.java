@@ -7,8 +7,6 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import util.ImageDecoder;
-
 public class LaplacianFilter {
 
 	public static void main (String args[]) throws Exception{
@@ -30,11 +28,23 @@ public class LaplacianFilter {
 
 			int w = srcImg.getWidth();
 			int h = srcImg.getHeight();
+			
+			System.out.print(srcBuf.getSize());
+			System.out.println(" "+h*w);
 
 			int src2d[][] =  new int[h][w];
-			ImageDecoder.exec(srcImg, src2d);
+			//グレイスケール取得
+//			ImageDecoder.exec(srcImg, src2d);
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x < w; x ++){
+					int argb = srcImg.getRGB(x,y);
+					src2d[y][x] = (int)(
+							0.3 * (argb >> 16 & 0xff) +
+							0.6 * (argb >> 8 & 0xff) + 
+							0.1 * (argb & 0xff));
+				}
+			}
 			
-
 			//オペレータ作成
 			int ope[][] = {
 					{-1, -1, -1},
@@ -72,7 +82,6 @@ public class LaplacianFilter {
 						max = dst2d[y][x];
 				}
 			}
-			System.out.println("max = " + max+" : min = "+ min);
 
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
@@ -89,7 +98,6 @@ public class LaplacianFilter {
 					dstBuf.setElem(y*w+x, nrm2d[y][x]);
 				}
 			}
-
 			ImageIO.write(dstImg, "bmp", dstFile);
 		}
 	}
