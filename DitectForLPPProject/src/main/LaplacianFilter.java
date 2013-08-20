@@ -4,9 +4,6 @@ import java.awt.image.BufferedImage;
 
 public class LaplacianFilter {
 
-	String srcDirPath = "./debug/src/";
-	String dstDirPath = "./debug/dst/";
-
 	public static void exec(BufferedImage srcImg,int gra2d[][],int mSize) throws Exception{
 
 		int w = srcImg.getWidth();
