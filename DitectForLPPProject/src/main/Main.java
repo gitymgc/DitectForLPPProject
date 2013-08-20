@@ -64,7 +64,7 @@ public class Main {
 				//各画素ごとのしきい値を決定
 				mh = 10;
 				int bord2d[][] =  new int[h][w];
-				getBoederLine(preBord2d,bord2d);
+				getBoｒderLine(preBord2d,bord2d);
 
 				//二値化実行
 				int bin2d[][] = new int[h][w];
@@ -92,7 +92,7 @@ public class Main {
 			}
 		}
 
-		private void getBoederLine(int[][] preBord2d, int[][] bord2d) {
+		private void getBoｒderLine(int[][] preBord2d, int[][] bord2d) {
 			for(int y = mh; y < h-mh; y++){
 				for(int x = mh; x < w-mh; x++){
 					int sum = 0;
