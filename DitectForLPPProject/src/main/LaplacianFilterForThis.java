@@ -2,7 +2,7 @@ package main;
 
 import java.awt.image.BufferedImage;
 
-public class LaplacianFilter {
+public class LaplacianFilterForThis {
 
 	public static void exec(BufferedImage srcImg,int gra2d[][],int mSize) throws Exception{
 
@@ -29,30 +29,14 @@ public class LaplacianFilter {
 						tmp += gra2d[y+my][x+mx] * ope[my+mh][mx+mh];
 					}
 				}
-				dst2d[y][x] = tmp;
-			}
-		}
-
-		//正規化
-		int max = Integer.MIN_VALUE;
-		int min = Integer.MAX_VALUE;
-
-		for(int y = 0; y < h; y ++){
-			for(int x = 0; x < w; x++){
-				if(dst2d[y][x] < min)
-					min = dst2d[y][x];
-				if(dst2d[y][x] > max)
-					max = dst2d[y][x];
-			}
-		}
-
-		int nrm2d[][] = new int[h][w];
-		for(int y = 0; y < h; y++){
-			for(int x = 0; x < w; x++){
-				nrm2d[y][x] = (int)(255 * ((double)(dst2d[y][x] - min) / (max -min)));
-				gra2d[y][x] = nrm2d[y][x];
-				
+				if(tmp > gra2d[y][x]){
+					dst2d[y][x] = 1;
+				}else{
+					dst2d[y][x] = 0;
+				}
+				gra2d[y][x] = dst2d[y][x];
 			}
 		}
 	}
 }
+
