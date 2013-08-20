@@ -46,9 +46,30 @@ public class Debug {
 			}
 			
 			//平滑化
-			EpsilonFilter.exec(srcImg, src2d, mSize, e, N);
+			int smth2d[][] = new int[h][w];
+			EpsilonFilter.exec(srcImg, src2d,smth2d, mSize, e, N);
 			//エッジ抽出
-			LaplacianFilterForThis.exec(srcImg,src2d,mSize);
+			int edge2d[][] = new int[h][w];
+			LaplacianFilterForThis.exec(srcImg,smth2d,edge2d,mSize);
+			//しきい値候補決定
+			int mh = mSize/2;
+			int bor2d[][] = new int[h][w];
+			for(int y = mh; y < h-mh; y++){
+				for(int x = mh; x < w-mh; x++){
+					if(src2d[y][x] == 1){
+						int min = Integer.MAX_VALUE;
+						for(int my = -mh; my <= mh; my++){
+							for(int mx = -mh; mx <= mh; mx++){
+//								if()
+								
+							}
+						}
+					}
+					
+					
+				}
+			}
+			
 			
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
@@ -59,7 +80,7 @@ public class Debug {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-					dstBuf.setElem(y*w+x, src2d[y][x]);
+					dstBuf.setElem(y*w+x, edge2d[y][x]);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);

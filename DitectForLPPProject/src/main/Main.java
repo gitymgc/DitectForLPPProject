@@ -46,10 +46,11 @@ public class Main {
 			}
 			
 			//平滑化
-			EpsilonFilter.exec(srcImg, src2d, mSize, e, N);
+			int smth2d[][] = new int[h][w];
+			EpsilonFilter.exec(srcImg, src2d,smth2d, mSize, e, N);
 			//エッジ抽出
-			LaplacianFilterForThis.exec(srcImg,src2d,mSize);
-			
+			int edge2d[][] = new int[h][w];
+			LaplacianFilterForThis.exec(srcImg,smth2d,edge2d,mSize);
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);

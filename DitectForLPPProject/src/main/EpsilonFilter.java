@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class EpsilonFilter {
 
-	public static void exec(BufferedImage srcImg,int gra2d[][] , int mSize,int e,int N) throws Exception{
+	public static void exec(BufferedImage srcImg,int gra2d[][],int smth2d[][], int mSize,int e,int N) throws Exception{
 
 		int w = srcImg.getWidth();
 		int h = srcImg.getHeight();
@@ -13,7 +13,13 @@ public class EpsilonFilter {
 		int mh = mSize/2;
 		int q = ((int)Math.pow((2*mh +1),2))-1;
 		int dst2d[][] = new int[h][w];
-
+		
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x < w; x ++){
+				smth2d[y][x] = gra2d[y][x];
+			}
+		}
+		
 		//平滑化
 		for(int i = 0; i < N; i++){
 			for(int y = mh; y <h-mh; y++){
@@ -26,10 +32,10 @@ public class EpsilonFilter {
 
 							//真ん中飛ばす
 							if(my == 0 && mx == 0)continue;
-							if(Math.abs(gra2d[y][x] - gra2d[y+my][x+mx]) <= e){
-								tmp += gra2d[y+my][x+mx];
+							if(Math.abs(smth2d[y][x] - smth2d[y+my][x+mx]) <= e){
+								tmp += smth2d[y+my][x+mx];
 							}else{
-								tmp += gra2d[y][x];
+								tmp += smth2d[y][x];
 							}
 						}
 					}
@@ -38,7 +44,7 @@ public class EpsilonFilter {
 			}
 			for(int y = mh; y <h-mh; y++){
 				for(int x = mh; x < w-mh; x++){
-					gra2d[y][x] = dst2d[y][x];
+					smth2d[y][x] = dst2d[y][x];
 				}
 			}
 		}

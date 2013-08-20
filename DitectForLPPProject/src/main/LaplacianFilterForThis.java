@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class LaplacianFilterForThis {
 
-	public static void exec(BufferedImage srcImg,int gra2d[][],int mSize) throws Exception{
+	public static void exec(BufferedImage srcImg,int gra2d[][],int edge2d[][],int mSize) throws Exception{
 
 		int w = srcImg.getWidth();
 		int h = srcImg.getHeight();
@@ -39,7 +39,7 @@ public class LaplacianFilterForThis {
 
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
-				gra2d[y][x] = dst2d[y][x];
+				edge2d[y][x] = dst2d[y][x];
 			}
 		}
 		
