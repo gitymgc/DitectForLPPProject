@@ -1,110 +1,79 @@
 package noiseExtraction;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.WritableRaster;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import main.LaplacianFilterForThis;
+import characterCandidateDitectionProcess.Parameter;
 
 public class NoiseExtraction {
 
-	public static void main(String[] args)throws Exception{
-
-		new NoiseExtraction().exec();
-
-	}
-
 	//パラメータ設定
 
-	int maxNum = 13;
-	int minNum = 10;
-	int expNum = 3;
+	static int maxNum;
+	static int minNum;
+	static int expNum;
 
-	String srcDirPath = "./debug/src/";
-	String dstDirPath = "./debug/dst/";
+	static int h;
+	static int w;
+	static int mSize;
+	static int mh;
+	static int mhForBin;
 
-	int h;
-	int w;
-	int mSize = 3;
-	int mh = mSize/2;
-	int mhForBin = 10;
+	/**
+	 * ノイズ抽出
+	 * @param param
+	 * @param srcImg
+	 * @param src2d
+	 * @param bin2d
+	 * @throws Exception
+	 */
+	public static void exec(Parameter param,BufferedImage srcImg,int src2d[][],int bin2d[][])throws Exception{
 
-	public void exec()throws Exception{
+		maxNum = param.maxNum;
+		minNum = param.minNum;
+		expNum = param.expNum;
+		
+		mSize = param.mSize;
+		mh = param.mh;
+		mhForBin = param.mhForBin;
+		
+		w = srcImg.getWidth();
+		h = srcImg.getHeight();
 
-		File srcDir = new File(srcDirPath);
-		File srcFiles[] = srcDir.listFiles();
-		for(File srcFile : srcFiles){
+		int max2d[][] = new int[h][w];
+		MaxFilter(src2d,max2d,maxNum);
+		
+		int min2d[][] = new int[h][w];
+		MinFilter(max2d,min2d,minNum);
 
-			BufferedImage srcImg = ImageIO.read(srcFile);
+		//エッジ検出
+		int edge2d[][] = new int[h][w];
+		LaplacianFilterForThis.exec(srcImg, min2d, edge2d, mSize);
 
-			w = srcImg.getWidth();
-			h = srcImg.getHeight();
+		//しきい値候補決定
+		int preBord2d[][] = new int[h][w];
+		getCandidateBorder(preBord2d,edge2d,min2d);
 
-			int src2d[][] =  new int[h][w];
-			//グレイスケール取得
-			//			ImageDecoder.exec(srcImg, src2d);
-			for(int y = 0; y < h; y++){
-				for(int x = 0; x < w; x ++){
-					int argb = srcImg.getRGB(x, y);
-					src2d[y][x] = (int)(
-							0.3 * (argb >> 16 & 0xff) +
-							0.6 * (argb >> 8 & 0xff) +
-							0.1 * (argb & 0xff));
+		//各画素ごとのしきい値を決定
+		int bord2d[][] =  new int[h][w];
+		getBoｒderLine(preBord2d,bord2d);
+
+		//二値化実行
+		for(int y = 0; y < h; y ++){
+			for(int x = 0; x < w; x++){
+				if(min2d[y][x] > bord2d[y][x]){
+					bin2d[y][x] = 1;
 				}
 			}
-
-
-			int max2d[][] = new int[h][w];
-			MaxFilter(src2d,max2d,maxNum);
-			int min2d[][] = new int[h][w];
-			MinFilter(max2d,min2d,minNum);
-
-			//エッジ検出
-			int edge2d[][] = new int[h][w];
-			LaplacianFilterForThis.exec(srcImg, min2d, edge2d, mSize);
-
-			//しきい値候補決定
-			int preBord2d[][] = new int[h][w];
-			getCandidateBorder(preBord2d,edge2d,min2d);
-
-			//各画素ごとのしきい値を決定
-			int bord2d[][] =  new int[h][w];
-			getBoｒderLine(preBord2d,bord2d);
-
-			//二値化実行
-			int bin2d[][] = new int[h][w];
-			for(int y = 0; y < h; y ++){
-				for(int x = 0; x < w; x++){
-					if(min2d[y][x] > bord2d[y][x]){
-						bin2d[y][x] = 1;
-					}
-				}
-			}
-
-			//膨張処理
-			Expansion(bin2d,expNum);
-			
-			String dstFilePath = dstDirPath + srcFile.getName();
-			String dstElem[] = srcFile.getName().split("\\.");
-			File dstFile = new File(dstFilePath);
-			BufferedImage dstImg = new BufferedImage(w,h,BufferedImage.TYPE_BYTE_GRAY);
-			WritableRaster dstRas = dstImg.getRaster();
-			DataBuffer dstBuf = dstRas.getDataBuffer();
-
-			for(int y = 0; y < h; y++){
-				for(int x = 0; x < w; x++){
-					dstBuf.setElem(y*w+x, bin2d[y][x]);
-				}
-			}
-			ImageIO.write(dstImg, "bmp", dstFile);
 		}
+
+		//膨張処理
+		Expansion(bin2d,expNum);
+
 	}
 
 
-	private void Expansion(int[][] bin2d, int num) {
+	private static void Expansion(int[][] bin2d, int num) {
 
 		int tmp2d[][] = new int[h][w];
 		for(int y = 0; y < h; y++){
@@ -137,7 +106,7 @@ public class NoiseExtraction {
 	}
 
 
-	private void MinFilter(int[][] max2d, int[][] min2d, int num) {
+	private static void MinFilter(int[][] max2d, int[][] min2d, int num) {
 
 		int tmp2d[][] = new int[h][w];
 		for(int y = 0; y < h; y++){
@@ -171,7 +140,7 @@ public class NoiseExtraction {
 		}
 	}
 
-	private void MaxFilter(int[][] src2d, int[][] max2d,int num) {
+	private static void MaxFilter(int[][] src2d, int[][] max2d,int num) {
 
 		int tmp2d[][] = new int[h][w];
 		for(int y = 0; y < h; y++){
@@ -205,7 +174,7 @@ public class NoiseExtraction {
 		}
 	}
 
-	private void getCandidateBorder(int[][] preBord2d, int[][] edge2d, int[][] min2d) {
+	private static void getCandidateBorder(int[][] preBord2d, int[][] edge2d, int[][] min2d) {
 		for(int y = mh; y < h-mh; y++){
 			for(int x = mh; x < w-mh; x++){
 				if(edge2d[y][x] == 1){
@@ -226,7 +195,7 @@ public class NoiseExtraction {
 		}
 	}
 
-	private void getBoｒderLine(int[][] preBord2d, int[][] bord2d) {
+	private static void getBoｒderLine(int[][] preBord2d, int[][] bord2d) {
 		for(int y = mhForBin; y < h-mhForBin; y++){
 			for(int x = mhForBin; x < w-mhForBin; x++){
 				int sum = 0;
