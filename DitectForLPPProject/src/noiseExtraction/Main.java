@@ -18,16 +18,19 @@ public class Main {
 	}
 
 	//パラメータ設定
-	int mSize = 3;
+
 	int maxNum = 13;
 	int minNum = 10;
 	int expNum = 3;
+
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
 
 	int h;
 	int w;
-	int mh;
+	int mSize = 3;
+	int mh = mSize/2;
+	int mhForBin = 10;
 
 	public void exec()throws Exception{
 
@@ -53,7 +56,7 @@ public class Main {
 				}
 			}
 
-			mh = mSize/2;
+
 			int max2d[][] = new int[h][w];
 			MaxFilter(src2d,max2d,maxNum);
 			int min2d[][] = new int[h][w];
@@ -68,7 +71,6 @@ public class Main {
 			getCandidateBorder(preBord2d,edge2d,min2d);
 
 			//各画素ごとのしきい値を決定
-			mh = 10;
 			int bord2d[][] =  new int[h][w];
 			getBoｒderLine(preBord2d,bord2d);
 
@@ -84,12 +86,7 @@ public class Main {
 
 			//膨張処理
 			Expansion(bin2d,expNum);
-
-
-
-
-
-
+			
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -230,12 +227,12 @@ public class Main {
 	}
 
 	private void getBoｒderLine(int[][] preBord2d, int[][] bord2d) {
-		for(int y = mh; y < h-mh; y++){
-			for(int x = mh; x < w-mh; x++){
+		for(int y = mhForBin; y < h-mhForBin; y++){
+			for(int x = mhForBin; x < w-mhForBin; x++){
 				int sum = 0;
 				int cnt = 0;
-				for(int my = -mh; my <= mh; my++){
-					for(int mx = -mh; mx <= mh; mx++){
+				for(int my = -mhForBin; my <= mhForBin; my++){
+					for(int mx = -mhForBin; mx <= mhForBin; mx++){
 						if(my == 0 && mx == 0)continue;
 						if(preBord2d[y+my][x+mx] > 0){
 							sum += preBord2d[y+my][x+mx];
