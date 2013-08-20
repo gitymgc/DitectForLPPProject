@@ -3,6 +3,7 @@ package characterCandidateDitectionProcess;
 public class Parameter {
 
 	//メンバ変数で定義
+	
 	//共用
 	public int mSize;
 	public int mh;
