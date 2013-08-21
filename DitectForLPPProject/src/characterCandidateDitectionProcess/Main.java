@@ -28,23 +28,64 @@ public class Main {
 		File srcFiles[] = srcDir.listFiles();
 		for(File srcFile : srcFiles){
 			BufferedImage srcImg = ImageIO.read(srcFile);
-			
+
 			w = srcImg.getWidth();
 			h = srcImg.getHeight();
-			
+
 			//グレイスケール化
 			int src2d[][] = new int[h][w];
 			TransForm.exec(srcImg,src2d);
+
 			//ベース画像作成
-			int binC2d[][] = new int[h][w];
-			BaseImageCreation.exec(param,srcImg, src2d, binC2d);
+			int binB2d[][] = new int[h][w];
+			BaseImageCreation.exec(param,srcImg, src2d, binB2d);
+
 			//ノイズ抽出
 			int binN2d[][] = new int[h][w];
 			NoiseExtraction.exec(param, srcImg, src2d, binN2d);
+
 			//文字候抽出
-			
-			
-			
+			int bin2d[][] = new int[h][w];
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x < w; x++){
+					bin2d[y][x] = binB2d[y][x];
+				}
+			}
+
+			int binDef2d[][] = new int[h][w];
+			for(int y = 0; y < h; y++){
+				for(int x =0; x < w; x++){
+					if(binB2d[y][x] == 1 && binN2d[y][x] == 0){
+						binDef2d[y][x] = 1;
+					}
+				}
+			}
+
+			int T = 10;
+			int neoBin2d[][] = new int[h][w];
+			for(int i = 0; i < T; i++){
+				for(int y = param.mh ; y < h-param.mh; y++){
+					for(int x = param.mh; x < w - param.mh; x++){
+						for(int my = -param.mh; my < param.mh;my++) {
+							for(int mx = -param.mh; mx < param.mh; mx++){
+								if(binDef2d[y][x] == 0 && bin2d[y][x] == 1){
+									neoBin2d[y+my][x+mx] = 0;
+								}else{
+									neoBin2d[y+my][x+mx] = binB2d[y+my][x+mx];
+								}
+							}
+						}
+					}
+				}
+				for(int y = param.mh ; y < h-param.mh; y++){
+					for(int x = param.mh; x < w - param.mh; x++){
+						bin2d[y][x] = binDef2d[y][x];
+						binDef2d[y][x] = neoBin2d[y][x];
+					}
+				}
+			}
+
+
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -58,7 +99,7 @@ public class Main {
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
-			
+
 
 
 		}
