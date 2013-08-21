@@ -66,24 +66,10 @@ public class NoiseExtraction {
 				}
 			}
 		}
-		//膨張処理のために反転
-//		for(int y = 0; y < h; y ++){
-//			for(int x = 0; x < w; x++){
-//				bin2d[y][x] = 1 - bin2d[y][x];
-//			}
-//		}
 
 		//膨張処理
 		Expansion(bin2d,expNum);
 		
-		
-		//元に戻す
-//		for(int y = 0; y < h; y ++){
-//			for(int x = 0; x < w; x++){
-//				bin2d[y][x] = 1 - bin2d[y][x];
-//			}
-//		}
-
 	}
 
 

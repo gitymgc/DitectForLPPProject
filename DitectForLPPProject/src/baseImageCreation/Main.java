@@ -87,7 +87,7 @@ public class Main {
 
 				for(int y = 0; y < h; y++){
 					for(int x = 0; x < w; x++){
-						dstBuf.setElem(y*w+x, bin2d[y][x]);
+						dstBuf.setElem(y*w+x, (edge2d[y][x] != 0)?255:0);
 					}
 				}
 				ImageIO.write(dstImg, "bmp", dstFile);

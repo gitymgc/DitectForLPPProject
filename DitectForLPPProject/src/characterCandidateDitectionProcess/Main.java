@@ -15,7 +15,7 @@ public class Main {
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,10,30,10,13,10,3);
+	Parameter param = new Parameter(3,10,30,10,15,12,3);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -44,7 +44,7 @@ public class Main {
 			int binN2d[][] = new int[h][w];
 			NoiseExtraction.exec(param, srcImg, src2d, binN2d);
 
-			//文字候抽出
+			//文字候補抽出
 			int bin2d[][] = new int[h][w];
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
@@ -61,17 +61,18 @@ public class Main {
 				}
 			}
 
-			int T = 10;
+			int T = 5;
 			int neoBin2d[][] = new int[h][w];
 			for(int i = 0; i < T; i++){
 				for(int y = param.mh ; y < h-param.mh; y++){
 					for(int x = param.mh; x < w - param.mh; x++){
 						for(int my = -param.mh; my < param.mh;my++) {
 							for(int mx = -param.mh; mx < param.mh; mx++){
+								if(my == 0 && mx == 0)continue;
 								if(binDef2d[y][x] == 0 && bin2d[y][x] == 1){
 									neoBin2d[y+my][x+mx] = 0;
 								}else{
-									neoBin2d[y+my][x+mx] = binB2d[y+my][x+mx];
+									neoBin2d[y+my][x+mx] = binDef2d[y+my][x+mx];
 								}
 							}
 						}
@@ -95,7 +96,9 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
+//					dstBuf.setElem(y*w+x, (neoBin2d[y][x] != 0)?255:0);
 					dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
+//					dstBuf.setElem(y*w+x, (binB2d[y][x] != 0)?255:0);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
