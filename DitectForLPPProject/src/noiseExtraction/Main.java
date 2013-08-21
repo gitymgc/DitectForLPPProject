@@ -78,7 +78,7 @@ public class Main {
 			int bin2d[][] = new int[h][w];
 			for(int y = 0; y < h; y ++){
 				for(int x = 0; x < w; x++){
-					if(min2d[y][x] > bord2d[y][x]){
+					if(min2d[y][x] < bord2d[y][x]){
 						bin2d[y][x] = 1;
 					}
 				}
@@ -96,7 +96,7 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-					dstBuf.setElem(y*w+x, bin2d[y][x]);
+					dstBuf.setElem(y*w+x, (bin2d[y][x] != 0)?255:0);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
@@ -124,7 +124,7 @@ public class Main {
 						}
 					}
 					if(sum > 0){
-						bin2d[y][x] = 1;
+						bin2d[y][x] = 255;
 					}
 				}
 			}
