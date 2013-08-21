@@ -89,7 +89,7 @@ public class NoiseExtraction {
 					for(int my = -mh; my <= mh; my++){
 						for(int mx = -mh; mx <= mh; mx++){
 							if(my == 0 && mx ==0)continue;
-							sum += tmp2d[y][x];
+							sum += tmp2d[y+my][x+mx];
 						}
 					}
 					if(sum > 0){
