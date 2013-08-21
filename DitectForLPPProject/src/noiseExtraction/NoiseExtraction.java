@@ -32,17 +32,17 @@ public class NoiseExtraction {
 		maxNum = param.maxNum;
 		minNum = param.minNum;
 		expNum = param.expNum;
-		
+
 		mSize = param.mSize;
 		mh = param.mh;
 		mhForBin = param.mhForBin;
-		
+
 		w = srcImg.getWidth();
 		h = srcImg.getHeight();
 
 		int max2d[][] = new int[h][w];
 		MaxFilter(src2d,max2d,maxNum);
-		
+
 		int min2d[][] = new int[h][w];
 		MinFilter(max2d,min2d,minNum);
 
@@ -66,9 +66,23 @@ public class NoiseExtraction {
 				}
 			}
 		}
+		//膨張処理のために反転
+		for(int y = 0; y < h; y ++){
+			for(int x = 0; x < w; x++){
+				bin2d[y][x] = 1 - bin2d[y][x];
+			}
+		}
 
 		//膨張処理
 		Expansion(bin2d,expNum);
+		
+		
+		//元に戻す
+		for(int y = 0; y < h; y ++){
+			for(int x = 0; x < w; x++){
+				bin2d[y][x] = 1 - bin2d[y][x];
+			}
+		}
 
 	}
 
