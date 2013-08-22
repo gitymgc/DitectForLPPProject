@@ -19,8 +19,8 @@ public class Main {
 
 	//パラメータ設定
 
-	int maxNum = 13;
-	int minNum = 10;
+	int maxNum = 10;
+	int minNum = 7;
 	int expNum = 3;
 
 	String srcDirPath = "./debug/src/";
@@ -86,7 +86,7 @@ public class Main {
 
 			//膨張処理
 			Expansion(bin2d,expNum);
-			
+
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -96,8 +96,11 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-					dstBuf.setElem(y*w+x, (edge2d[y][x] != 0)?255:0);
 //					dstBuf.setElem(y*w+x, min2d[y][x]);
+					//					dstBuf.setElem(y*w+x, edge2d[y][x]);
+//										dstBuf.setElem(y*w+x, (edge2d[y][x] != 0)?255:0);
+										dstBuf.setElem(y*w+x, (bin2d[y][x] != 0)?255:0);
+//										dstBuf.setElem(y*w+x, min2d[y][x]);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
@@ -125,7 +128,7 @@ public class Main {
 						}
 					}
 					if(sum > 0){
-						bin2d[y][x] = 255;
+						bin2d[y][x] = 1;
 					}
 				}
 			}

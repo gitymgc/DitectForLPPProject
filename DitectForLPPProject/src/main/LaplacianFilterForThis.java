@@ -34,6 +34,7 @@ public class LaplacianFilterForThis {
 				}else{
 					dst2d[y][x] = 0;
 				}
+				//				dst2d[y][x] = tmp;
 			}
 		}
 
@@ -42,6 +43,34 @@ public class LaplacianFilterForThis {
 				edge2d[y][x] = dst2d[y][x];
 			}
 		}
-		
+
+		//正規化
+		//		int max = Integer.MIN_VALUE;
+		//		int min = Integer.MAX_VALUE;
+		//		int sum = 0;
+		//		int ave = 0;
+		//
+		//		for(int y = 0; y < h; y ++){
+		//			for(int x = 0; x < w; x++){
+		//				if(dst2d[y][x] < min)
+		//					min = dst2d[y][x];
+		//				if(dst2d[y][x] > max)
+		//					max = dst2d[y][x];
+		//			}
+		//		}
+		//		
+		//		int nrm2d[][] = new int[h][w];
+		//		for(int y = 0; y < h; y++){
+		//			for(int x = 0; x < w; x++){
+		//				nrm2d[y][x] = (int)(255 * ((double)(dst2d[y][x] - min) / (max -min)));
+		//				sum += nrm2d[y][x];
+		//			}
+		//		}
+		//		ave = sum/(h*w);
+		//		for(int y = 0; y < h; y++){
+		//			for(int x = 0; x < w; x++){
+		//				edge2d[y][x] = (nrm2d[y][x] > ave)?1:0;
+		//			}
+		//		}
 	}
 }

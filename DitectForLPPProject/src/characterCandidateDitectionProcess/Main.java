@@ -41,8 +41,19 @@ public class Main {
 			BaseImageCreation.exec(param,srcImg, src2d, binB2d);
 
 			//ノイズ抽出
+			int lowGra2d[][] = new int[h][w];
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x <w; x++){
+					if((src2d[y][x] -50) > 0){
+					lowGra2d[y][x] = (int)(src2d[y][x] - 50);
+					}else{
+						lowGra2d[y][x] = 0;
+					}
+				}
+			}
 			int binN2d[][] = new int[h][w];
 			NoiseExtraction.exec(param, srcImg, src2d, binN2d);
+//			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
 
 			//文字候補抽出
 			int bin2d[][] = new int[h][w];
@@ -87,6 +98,7 @@ public class Main {
 			}
 
 
+			
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -96,6 +108,7 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
+//					dstBuf.setElem(y*w+x, lowGra2d[y][x]);
 					dstBuf.setElem(y*w+x, (neoBin2d[y][x] != 0)?255:0);
 //										dstBuf.setElem(y*w+x, (binDef2d[y][x] != 0)?255:0);
 //										dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
