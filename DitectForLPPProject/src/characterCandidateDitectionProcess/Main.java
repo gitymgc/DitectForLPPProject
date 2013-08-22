@@ -15,7 +15,7 @@ public class Main {
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,10,30,10,15,12,3);
+	Parameter param = new Parameter(3,15,30,10,15,13,10,3,10);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -61,7 +61,7 @@ public class Main {
 				}
 			}
 
-			int T = 5;
+			int T = param.T;
 			int neoBin2d[][] = new int[h][w];
 			for(int i = 0; i < T; i++){
 				for(int y = param.mh ; y < h-param.mh; y++){
@@ -96,9 +96,10 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-//					dstBuf.setElem(y*w+x, (neoBin2d[y][x] != 0)?255:0);
-					dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
-//					dstBuf.setElem(y*w+x, (binB2d[y][x] != 0)?255:0);
+					dstBuf.setElem(y*w+x, (neoBin2d[y][x] != 0)?255:0);
+//										dstBuf.setElem(y*w+x, (binDef2d[y][x] != 0)?255:0);
+//										dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
+//										dstBuf.setElem(y*w+x, (binB2d[y][x] != 0)?255:0);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
