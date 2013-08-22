@@ -16,7 +16,11 @@ public class Parameter {
 	//NioseExtraction用
 	public int maxNum;
 	public int minNum;
+	public int mhForBin2;
 	public int expNum;
+	
+	//文字候補抽出用
+	public int T;
 
 
 	/**
@@ -27,9 +31,11 @@ public class Parameter {
 	 * @param smthNum
 	 * @param maxNum
 	 * @param minNum
+	 * @param mhForBin2
 	 * @param expNum
+	 * @param T
 	 */
-	public Parameter(int mSize,int mhForBin,int epsilon, int smthNum,int maxNum,int minNum,int expNum){
+	public Parameter(int mSize,int mhForBin,int epsilon, int smthNum,int maxNum,int minNum,int mhForBin2,int expNum,int T){
 		//コンクラスタで値を格納
 		this.mSize = mSize;
 		this.mh = mSize/2;
@@ -40,7 +46,10 @@ public class Parameter {
 
 		this.maxNum = maxNum;
 		this.minNum = minNum;
+		this.mhForBin2 = mhForBin2;
 		this.expNum = expNum;
+		
+		this.T= T;
 
 	}
 
