@@ -55,10 +55,22 @@ public class Main {
 							0.1 * (argb & 0xff));
 				}
 			}
+			
+			//ノイズ抽出
+			int lowGra2d[][] = new int[h][w];
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x <w; x++){
+					if((src2d[y][x] - 85) > 0){
+					lowGra2d[y][x] = (int)(src2d[y][x] - 85);
+					}else{
+						lowGra2d[y][x] = 0;
+					}
+				}
+			}
 
 
 			int max2d[][] = new int[h][w];
-			MaxFilter(src2d,max2d,maxNum);
+			MaxFilter(lowGra2d,max2d,maxNum);
 			int min2d[][] = new int[h][w];
 			MinFilter(max2d,min2d,minNum);
 
@@ -99,8 +111,8 @@ public class Main {
 //					dstBuf.setElem(y*w+x, min2d[y][x]);
 					//					dstBuf.setElem(y*w+x, edge2d[y][x]);
 //										dstBuf.setElem(y*w+x, (edge2d[y][x] != 0)?255:0);
-										dstBuf.setElem(y*w+x, (bin2d[y][x] != 0)?255:0);
-//										dstBuf.setElem(y*w+x, min2d[y][x]);
+//										dstBuf.setElem(y*w+x, (bin2d[y][x] != 0)?255:0);
+										dstBuf.setElem(y*w+x, lowGra2d[y][x]);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
