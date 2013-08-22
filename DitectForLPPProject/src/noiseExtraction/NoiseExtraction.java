@@ -26,6 +26,7 @@ public class NoiseExtraction {
 	 * @param src2d
 	 * @param bin2d
 	 * @throws Exception
+	 * 
 	 */
 	public static void exec(Parameter param,BufferedImage srcImg,int src2d[][],int bin2d[][])throws Exception{
 
@@ -35,7 +36,7 @@ public class NoiseExtraction {
 
 		mSize = param.mSize;
 		mh = param.mh;
-		mhForBin = param.mhForBin;
+		mhForBin = param.mhForBin2;
 
 		w = srcImg.getWidth();
 		h = srcImg.getHeight();
