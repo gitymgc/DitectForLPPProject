@@ -46,7 +46,7 @@ public class NoiseExtraction {
 
 		int min2d[][] = new int[h][w];
 		MinFilter(max2d,min2d,minNum);
-
+		
 		//エッジ検出
 		int edge2d[][] = new int[h][w];
 		LaplacianFilterForThis.exec(srcImg, min2d, edge2d, mSize);

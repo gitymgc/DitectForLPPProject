@@ -15,7 +15,7 @@ public class Main {
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,15,30,10,15,13,10,3,10);
+	Parameter param = new Parameter(3,15,30,10,15,13,10,3,50);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -45,15 +45,24 @@ public class Main {
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x <w; x++){
 					if((src2d[y][x] -50) > 0){
-					lowGra2d[y][x] = (int)(src2d[y][x] - 50);
+					lowGra2d[y][x] = (int)(src2d[y][x] - 85);
 					}else{
 						lowGra2d[y][x] = 0;
 					}
 				}
 			}
+			
+			//反転
+			int opt2d[][] = new int[h][w];
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x < w; x++){
+					opt2d[y][x] = 255 - src2d[y][x];
+				}
+			}
+
 			int binN2d[][] = new int[h][w];
-			NoiseExtraction.exec(param, srcImg, src2d, binN2d);
-//			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
+//			NoiseExtraction.exec(param, srcImg, opt2d, binN2d);
+			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
 
 			//文字候補抽出
 			int bin2d[][] = new int[h][w];
@@ -109,8 +118,8 @@ public class Main {
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
 //					dstBuf.setElem(y*w+x, lowGra2d[y][x]);
-					dstBuf.setElem(y*w+x, (neoBin2d[y][x] != 0)?255:0);
-//										dstBuf.setElem(y*w+x, (binDef2d[y][x] != 0)?255:0);
+//					dstBuf.setElem(y*w+x, (neoBin2d[y][x] != 0)?255:0);
+										dstBuf.setElem(y*w+x, (binDef2d[y][x] != 0)?255:0);
 //										dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
 //										dstBuf.setElem(y*w+x, (binB2d[y][x] != 0)?255:0);
 				}
