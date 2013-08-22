@@ -6,7 +6,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import noiseExtraction.NoiseExtraction;
+import noiseExtraction.NoiseExtractionOpt;
 import transForm.TransForm;
 import baseImageCreation.BaseImageCreation;
 public class Main {
@@ -15,7 +15,7 @@ public class Main {
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,15,30,10,15,13,10,3,50);
+	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -52,17 +52,18 @@ public class Main {
 				}
 			}
 			
-			//反転
-			int opt2d[][] = new int[h][w];
-			for(int y = 0; y < h; y++){
-				for(int x = 0; x < w; x++){
-					opt2d[y][x] = 255 - src2d[y][x];
-				}
-			}
+//			//反転
+//			int opt2d[][] = new int[h][w];
+//			for(int y = 0; y < h; y++){
+//				for(int x = 0; x < w; x++){
+//					opt2d[y][x] = 255 - src2d[y][x];
+//				}
+//			}
 
 			int binN2d[][] = new int[h][w];
+			NoiseExtractionOpt.exec(param, srcImg, src2d, binN2d);
 //			NoiseExtraction.exec(param, srcImg, opt2d, binN2d);
-			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
+//			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
 
 			//文字候補抽出
 			int bin2d[][] = new int[h][w];
