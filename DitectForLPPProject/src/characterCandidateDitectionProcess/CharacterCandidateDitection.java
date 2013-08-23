@@ -18,6 +18,9 @@ public class CharacterCandidateDitection {
 	public static void exec(Parameter param,BufferedImage srcImg,int binB2d[][], int binN2d[][],int neoBin2d[][])throws Exception{
 
 
+		h = srcImg.getHeight();
+		w = srcImg.getWidth();
+		
 		//文字候補抽出
 		//ベース画像輝度値コピー
 		int bin2d[][] = new int[h][w];
