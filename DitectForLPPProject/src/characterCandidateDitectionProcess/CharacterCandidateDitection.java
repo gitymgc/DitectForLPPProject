@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 
 public class CharacterCandidateDitection {
 
-	int h;
-	int w;
+	static int h;
+	static int w;
 	/**
 	 * 
 	 * @param param
@@ -15,7 +15,7 @@ public class CharacterCandidateDitection {
 	 * @param neoBin2d
 	 * @throws Exception
 	 */
-	public void exec(Parameter param,BufferedImage srcImg,int binB2d[][], int binN2d[][],int neoBin2d[][])throws Exception{
+	public static void exec(Parameter param,BufferedImage srcImg,int binB2d[][], int binN2d[][],int neoBin2d[][])throws Exception{
 
 
 		//文字候補抽出
