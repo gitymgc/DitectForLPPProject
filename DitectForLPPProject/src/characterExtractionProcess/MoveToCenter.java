@@ -1,97 +1,77 @@
 package characterExtractionProcess;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.WritableRaster;
-import java.io.File;
 
-import javax.imageio.ImageIO;
-
-import noiseExtraction.NoiseExtraction;
-import transForm.TransForm;
-import baseImageCreation.BaseImageCreation;
-import characterCandidateDitectionProcess.CharacterCandidateDitection;
 import characterCandidateDitectionProcess.Parameter;
-public class Main {
+public class MoveToCenter {
 
-	public static void main(String[] args)throws Exception{
-		new Main().exec();
-	}
-	//パラメータ設定
-	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50);
+	static int h;
+	static int w;
 
-	String srcDirPath = "./debug/src/";
-	String dstDirPath = "./debug/dst/";
+	public static void exec(Parameter param,BufferedImage srcImg,int[][] neoBin2d,int binW2d[][])throws Exception{
+	
+		h = srcImg.getHeight();
+		w = srcImg.getWidth();
+		
 
-	int h;
-	int w;
+		//重心移動
+		//コピー
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x < w; x++){
+				binW2d[y][x] = neoBin2d[y][x];
+			}
+		}
 
-	public void exec()throws Exception{
-		File srcDir = new File(srcDirPath);
-		File srcFiles[] = srcDir.listFiles();
-		for(File srcFile : srcFiles){
-			BufferedImage srcImg = ImageIO.read(srcFile);
+		int cnt = 0;
+		int neoCnt = 0;
+		for(;;){
+			int tmpW2d[][] = new int [h][w];
+			getTmp(binW2d,tmpW2d);
 
-			w = srcImg.getWidth();
-			h = srcImg.getHeight();
+			//局所重心、移動ベクトル算出
+			int vect[][][] = new int[h][w][2];
+			getVector(param,tmpW2d,vect);
 
-			//グレイスケール化
-			int src2d[][] = new int[h][w];
-			TransForm.exec(srcImg,src2d);
+			//ベクトル正規化準備
+			int theta[][][]= new int[h][w][2];
+			int neoBinW2d[][] = new int[h][w];
 
-			//ベース画像作成
-			int binB2d[][] = new int[h][w];
-			BaseImageCreation.exec(param,srcImg, src2d, binB2d);
+			//収束処理
+			if(cnt != 0 && cnt == neoCnt){
+				getEnd(vect, theta,binW2d,neoBinW2d);
+				break;
+			}
 
-			//ノイズ抽出
-			int lowGra2d[][] = new int[h][w];
+			//正規化ベクトル取得
+			getTheta(vect, theta);
 			for(int y = 0; y < h; y++){
-				for(int x = 0; x <w; x++){
-					if((src2d[y][x] -50) > 0){
-						lowGra2d[y][x] = (int)(src2d[y][x] - 50);
-					}else{
-						lowGra2d[y][x] = 0;
+				for(int x = 0; x < w; x++){
+					neoBinW2d[y+theta[y][x][1]][x+theta[y][x][0]] +=  binW2d[y][x];
+				}
+			}
+
+			//収束判定
+			cnt = 0;
+			neoCnt = 0;
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x < w; x++){
+					if(binW2d[y][x] != 0){
+						cnt++;
+					}
+					if(neoBinW2d[y][x] != 0){
+						neoCnt++;
 					}
 				}
 			}
-			int binN2d[][] = new int[h][w];
-			//			NoiseExtractionOpt.exec(param, srcImg, src2d, binN2d);
-			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
-
-			//文字候補抽出
-			int neoBin2d[][] = new int[h][w];
-			CharacterCandidateDitection.exec(param, srcImg, binB2d, binN2d, neoBin2d);
-
-			//文字抽出
-			//重心移動
-			int binW2d[][] = new int[h][w];
-			MoveToCenter.exec(param, srcImg,neoBin2d, binW2d);
-
-
-			String dstFilePath = dstDirPath + srcFile.getName();
-			String dstElem[] = srcFile.getName().split("\\.");
-			File dstFile = new File(dstFilePath);
-			BufferedImage dstImg = new BufferedImage(w,h,BufferedImage.TYPE_BYTE_GRAY);
-			WritableRaster dstRas = dstImg.getRaster();
-			DataBuffer dstBuf = dstRas.getDataBuffer();
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-					//					dstBuf.setElem(y*w+x, lowGra2d[y][x]);
-					dstBuf.setElem(y*w+x, (binW2d[y][x] != 0)?255:0);
-					//					dstBuf.setElem(y*w+x, binW2d[y][x]);
-					//										dstBuf.setElem(y*w+x, (binDef2d[y][x] != 0)?255:0);
-					//										dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
-					//										dstBuf.setElem(y*w+x, (binB2d[y][x] != 0)?255:0);
+					binW2d[y][x] = neoBinW2d[y][x];
 				}
 			}
-			ImageIO.write(dstImg, "bmp", dstFile);
-
 		}
 	}
 
-
-
-	private void getTheta(int[][][] vect, int[][][] theta) {
+	private static void getTheta(int[][][] vect, int[][][] theta) {
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
 				int r = vect[y][x][0];
@@ -132,7 +112,7 @@ public class Main {
 
 	}
 
-	private void getTmp(int[][] binW2d, int[][] tmpW2d) {
+	private static void getTmp(int[][] binW2d, int[][] tmpW2d) {
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
 				if(binW2d[y][x] > 0){
@@ -145,7 +125,7 @@ public class Main {
 
 	}
 
-	private void getVector(Parameter param2, int[][] tmpW2d, int[][][] vect) {
+	private static void getVector(Parameter param, int[][] tmpW2d, int[][][] vect) {
 
 		for(int y = param.mh; y < h-param.mh; y++){
 			for(int x = param.mh; x < w-param.mh; x++){
@@ -165,7 +145,7 @@ public class Main {
 
 	}
 
-	private void getEnd(int[][][] vect, int[][][] theta, int[][] binW2d, int[][] neoBinW2d) {
+	private static void getEnd(int[][][] vect, int[][][] theta, int[][] binW2d, int[][] neoBinW2d) {
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
 				int r = vect[y][x][0];
