@@ -17,7 +17,7 @@ public class Main {
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50);
+	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50,40,5);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -65,8 +65,11 @@ public class Main {
 			//重心移動
 			int binW2d[][] = new int[h][w];
 			MoveToCenter.exec(param, srcImg,neoBin2d, binW2d);
-
-
+			//サイズ判別
+			int binY2d[][]  = new int[h][w];
+			SizeJudge.exec(param, srcImg, neoBin2d, binW2d, binY2d);
+			
+			//もうひとつの処理
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -77,7 +80,9 @@ public class Main {
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
 					//					dstBuf.setElem(y*w+x, lowGra2d[y][x]);
-					dstBuf.setElem(y*w+x, (binW2d[y][x] != 0)?255:0);
+					dstBuf.setElem(y*w+x, binY2d[y][x] *255);
+					//					dstBuf.setElem(y*w+x, neoBin2d[y][x] *255);
+					//					dstBuf.setElem(y*w+x, binW2d[y][x] *10);
 					//					dstBuf.setElem(y*w+x, binW2d[y][x]);
 					//										dstBuf.setElem(y*w+x, (binDef2d[y][x] != 0)?255:0);
 					//										dstBuf.setElem(y*w+x, (binN2d[y][x] != 0)?255:0);
@@ -86,122 +91,6 @@ public class Main {
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
 
-		}
-	}
-
-
-
-	private void getTheta(int[][][] vect, int[][][] theta) {
-		for(int y = 0; y < h; y++){
-			for(int x = 0; x < w; x++){
-				int r = vect[y][x][0];
-				int s = vect[y][x][1];
-				int absR = Math.abs(r);
-				int absS = Math.abs(s);
-				if(r > 0 && 2*absS < absR){
-					theta[y][x][0] = 1;
-					theta[y][x][1] = 0;
-				}else if( r > 0 && s > 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = 1;
-					theta[y][x][1] = 1;
-				}else if(r > 0 && s < 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = 1;
-					theta[y][x][1] = -1;
-				}else if(r < 0 && 2*absS < absR){
-					theta[y][x][0] = -1;
-					theta[y][x][1] = 0;
-				}else if( r < 0 && s > 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = -1;
-					theta[y][x][1] = 1;
-				}else if( r < 0 && s < 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = -1;
-					theta[y][x][1] = -1;
-				}else if (s > 0 && 2*absR < absS){
-					theta[y][x][0] = 0;
-					theta[y][x][1] = 1;
-				}else if(s < 0 && 2*absR <= absS){
-					theta[y][x][0] = 0;
-					theta[y][x][1] = -1;
-				}else{
-					theta[y][x][0] = 0;
-					theta[y][x][1] = 0;
-				}
-			}
-		}
-
-
-	}
-
-	private void getTmp(int[][] binW2d, int[][] tmpW2d) {
-		for(int y = 0; y < h; y++){
-			for(int x = 0; x < w; x++){
-				if(binW2d[y][x] > 0){
-					tmpW2d[y][x] = 1;
-				}else{
-					tmpW2d[y][x] = 0;
-				}
-			}
-		}
-
-	}
-
-	private void getVector(Parameter param2, int[][] tmpW2d, int[][][] vect) {
-
-		for(int y = param.mh; y < h-param.mh; y++){
-			for(int x = param.mh; x < w-param.mh; x++){
-				int r = 0;
-				int s = 0;
-				for(int my = -param.mh; my <= param.mh; my++){
-					for(int mx = -param.mh; mx <= param.mh; mx++){
-						if(my == 0 && mx == 0)continue;
-						r += mx * tmpW2d[y+my][x+mx];
-						s += my * tmpW2d[y+my][x+mx];
-					}
-				}
-				vect[y][x][0] = r;
-				vect[y][x][1] = s;
-			}
-		}
-
-	}
-
-	private void getEnd(int[][][] vect, int[][][] theta, int[][] binW2d, int[][] neoBinW2d) {
-		for(int y = 0; y < h; y++){
-			for(int x = 0; x < w; x++){
-				int r = vect[y][x][0];
-				int s = vect[y][x][1];
-				int absR = Math.abs(r);
-				int absS = Math.abs(s);
-				if(r > 0 && 2*absS < absR){
-					theta[y][x][0] = 1;
-					theta[y][x][1] = 0;
-				}else if( r > 0 && s < 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = 1;
-					theta[y][x][1] = 0;
-				}else if(r > 0 && s > 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = 1;
-					theta[y][x][1] = 1;
-				}else if(r < 0 && s > 0 && absR/2 <= absS && absS <= 2*absR){
-					theta[y][x][0] = 0;
-					theta[y][x][1] = 1;
-				}else if(s > 0 && 2*absR < absS){
-					theta[y][x][0] = 0;
-					theta[y][x][1] = 1;
-				}else{
-					theta[y][x][0] = 0;
-					theta[y][x][1] = 0;
-				}
-			}
-		}
-		for(int y = 0; y < h; y++){
-			for(int x = 0; x < w; x++){
-				neoBinW2d[y+theta[y][x][1]][x+theta[y][x][0]] +=  binW2d[y][x];
-			}
-		}
-		for(int y = 0; y < h; y++){
-			for(int x = 0; x < w; x++){
-				binW2d[y][x] = neoBinW2d[y][x];
-			}
 		}
 	}
 }
