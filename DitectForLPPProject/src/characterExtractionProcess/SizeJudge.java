@@ -27,7 +27,6 @@ public class SizeJudge {
 		}
 		//			論文の指定処理
 		for(;;){
-			System.out.println("a");
 			int cnt = 0; 
 			int neoCnt = 0;
 			int neoBinY2d[][] = new int[h][w];
@@ -57,7 +56,6 @@ public class SizeJudge {
 				}
 			}
 			if(cnt == neoCnt){
-				System.out.println(cnt);
 				break;
 			}
 		}
