@@ -37,6 +37,8 @@ public class Parameter {
 	 * @param mhForBin2
 	 * @param expNum
 	 * @param T
+	 * @param big
+	 * @param small
 	 */
 	public Parameter(int mSize,int mhForBin,int epsilon, int smthNum,int maxNum,int minNum,int mhForBin2,int expNum,int T,int big, int small){
 		//コンクラスタで値を格納
