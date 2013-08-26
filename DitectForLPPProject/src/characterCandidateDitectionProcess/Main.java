@@ -15,7 +15,7 @@ public class Main {
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50);
+	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50,40,5);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -87,8 +87,8 @@ public class Main {
 			for(int i = 0; i < T; i++){
 				for(int y = param.mh ; y < h-param.mh; y++){
 					for(int x = param.mh; x < w - param.mh; x++){
-						for(int my = -param.mh; my < param.mh;my++) {
-							for(int mx = -param.mh; mx < param.mh; mx++){
+						for(int my = -param.mh; my <= param.mh;my++) {
+							for(int mx = -param.mh; mx <= param.mh; mx++){
 								if(my == 0 && mx == 0)continue;
 								if(binDef2d[y][x] == 0 && bin2d[y][x] == 1){
 									neoBin2d[y+my][x+mx] = 0;
