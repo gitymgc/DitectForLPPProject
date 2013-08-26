@@ -21,7 +21,10 @@ public class Parameter {
 	
 	//文字候補抽出用
 	public int T;
-
+	
+	//サイズ判別式
+	public int big;
+	public int small;
 
 	/**
 	 * パラメータ
@@ -35,7 +38,7 @@ public class Parameter {
 	 * @param expNum
 	 * @param T
 	 */
-	public Parameter(int mSize,int mhForBin,int epsilon, int smthNum,int maxNum,int minNum,int mhForBin2,int expNum,int T){
+	public Parameter(int mSize,int mhForBin,int epsilon, int smthNum,int maxNum,int minNum,int mhForBin2,int expNum,int T,int big, int small){
 		//コンクラスタで値を格納
 		this.mSize = mSize;
 		this.mh = mSize/2;
@@ -50,6 +53,9 @@ public class Parameter {
 		this.expNum = expNum;
 		
 		this.T= T;
+		
+		this.big = big;
+		this.small = small;
 
 	}
 
