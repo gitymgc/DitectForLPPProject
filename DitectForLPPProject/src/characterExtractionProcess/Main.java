@@ -68,8 +68,8 @@ public class Main {
 			//サイズ判別
 			int binY2d[][]  = new int[h][w];
 			SizeJudge.exec(param, srcImg, neoBin2d, binW2d, binY2d);
+
 			
-			//もうひとつの処理
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -80,7 +80,8 @@ public class Main {
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
 					//					dstBuf.setElem(y*w+x, lowGra2d[y][x]);
-					dstBuf.setElem(y*w+x, binY2d[y][x] *255);
+//					dstBuf.setElem(y*w+x, binY2d[y][x] *128);
+					dstBuf.setElem(y*w+x, binY2d[y][x]);
 					//					dstBuf.setElem(y*w+x, neoBin2d[y][x] *255);
 					//					dstBuf.setElem(y*w+x, binW2d[y][x] *10);
 					//					dstBuf.setElem(y*w+x, binW2d[y][x]);
