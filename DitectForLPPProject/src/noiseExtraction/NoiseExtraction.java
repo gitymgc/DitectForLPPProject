@@ -1,8 +1,9 @@
 package noiseExtraction;
 
+import image.filter.LaplacianFilter;
+
 import java.awt.image.BufferedImage;
 
-import main.LaplacianFilterForThis;
 import characterCandidateDitectionProcess.Parameter;
 
 public class NoiseExtraction {
@@ -46,10 +47,21 @@ public class NoiseExtraction {
 
 		int min2d[][] = new int[h][w];
 		MinFilter(max2d,min2d,minNum);
-		
+
 		//エッジ検出
+		int lap2d[][] = new int[h][w];
+		LaplacianFilter.exec(srcImg,min2d,lap2d,mSize);
 		int edge2d[][] = new int[h][w];
-		LaplacianFilterForThis.exec(srcImg, min2d, edge2d, mSize);
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x < w; x++){
+				if(lap2d[y][x] > min2d[y][x]){
+					edge2d[y][x] = 1;
+				}else{
+					edge2d[y][x] = 0;
+				}
+			}
+		}
+
 
 		//しきい値候補決定
 		int preBord2d[][] = new int[h][w];
@@ -70,7 +82,7 @@ public class NoiseExtraction {
 
 		//膨張処理
 		Expansion(bin2d,expNum);
-		
+
 	}
 
 
