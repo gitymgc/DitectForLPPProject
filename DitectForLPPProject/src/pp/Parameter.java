@@ -28,17 +28,17 @@ public class Parameter {
 
 	/**
 	 * パラメータ
-	 * @param mSize
-	 * @param mhForBin
-	 * @param epsilon
-	 * @param smthNum
-	 * @param maxNum
-	 * @param minNum
-	 * @param mhForBin2
-	 * @param expNum
-	 * @param T
-	 * @param big
-	 * @param small
+	 * @param mSize マトリックスサイズ
+	 * @param mhForBin 二値化近傍長（平滑化後）
+	 * @param epsilon 平滑化パラメータε
+	 * @param smthNum 平滑化回数
+	 * @param maxNum 最大値フィルタ回数
+	 * @param minNum 査証地フィルタ回数
+	 * @param mhForBin2 二値化近傍長(文字消去後)
+	 * @param expNum 膨張回数
+	 * @param T	連結領域削除実行回数
+	 * @param big サイズ判別式最大値
+	 * @param small サイズ判別式最小値
 	 */
 	public Parameter(int mSize,int mhForBin,int epsilon, int smthNum,int maxNum,int minNum,int mhForBin2,int expNum,int T,int big, int small){
 		//コンクラスタで値を格納
