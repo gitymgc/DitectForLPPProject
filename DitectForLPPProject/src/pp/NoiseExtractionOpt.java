@@ -65,9 +65,9 @@ public class NoiseExtractionOpt {
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
 				if(lap2d[y][x] > min2d[y][x]){
-					edge2d[y][x] = 0;
-				}else{
 					edge2d[y][x] = 1;
+				}else{
+					edge2d[y][x] = 0;
 				}
 			}
 		}
