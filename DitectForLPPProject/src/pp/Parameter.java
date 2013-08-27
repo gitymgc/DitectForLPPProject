@@ -33,7 +33,7 @@ public class Parameter {
 	 * @param epsilon 平滑化パラメータε
 	 * @param smthNum 平滑化回数
 	 * @param maxNum 最大値フィルタ回数
-	 * @param minNum 査証地フィルタ回数
+	 * @param minNum 最小値フィルタ回数
 	 * @param mhForBin2 二値化近傍長(文字消去後)
 	 * @param expNum 膨張回数
 	 * @param T	連結領域削除実行回数
