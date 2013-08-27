@@ -1,4 +1,6 @@
 package main;
+import image.filter.GrayScale;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.WritableRaster;
@@ -13,7 +15,6 @@ import pp.NoiseElimination;
 import pp.NoiseExtraction;
 import pp.Parameter;
 import pp.SizeJudge;
-import pp.TransForm;
 
 public class Main {
 
@@ -40,7 +41,8 @@ public class Main {
 
 			//グレイスケール化
 			int src2d[][] = new int[h][w];
-			TransForm.exec(srcImg,src2d);
+			GrayScale gs = new GrayScale();
+			gs.exec(srcImg,src2d);
 
 			//ベース画像作成
 			int binB2d[][] = new int[h][w];
