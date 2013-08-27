@@ -1,7 +1,6 @@
-package noiseEliminationProcess;
+package pp;
 import java.awt.image.BufferedImage;
 
-import characterCandidateDitectionProcess.Parameter;
 public class NoiseElimination {
 
 	static int h;

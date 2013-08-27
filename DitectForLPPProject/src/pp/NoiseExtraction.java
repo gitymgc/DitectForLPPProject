@@ -1,10 +1,9 @@
-package noiseExtraction;
+package pp;
 
 import image.filter.LaplacianFilter;
 
 import java.awt.image.BufferedImage;
 
-import characterCandidateDitectionProcess.Parameter;
 
 public class NoiseExtraction {
 

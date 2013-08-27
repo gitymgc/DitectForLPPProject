@@ -1,7 +1,6 @@
-package characterExtractionProcess;
+package pp;
 import java.awt.image.BufferedImage;
 
-import characterCandidateDitectionProcess.Parameter;
 public class SizeJudge {
 
 	static int h;

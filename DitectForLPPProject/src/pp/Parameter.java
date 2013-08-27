@@ -1,4 +1,4 @@
-package characterCandidateDitectionProcess;
+package pp;
 
 public class Parameter {
 

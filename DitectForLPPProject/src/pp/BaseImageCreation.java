@@ -1,11 +1,11 @@
-package baseImageCreation;
+package pp;
 
 import image.filter.EpsilonFilter;
 import image.filter.LaplacianFilter;
 
 import java.awt.image.BufferedImage;
 
-import characterCandidateDitectionProcess.Parameter;
+
 
 public class BaseImageCreation {
 

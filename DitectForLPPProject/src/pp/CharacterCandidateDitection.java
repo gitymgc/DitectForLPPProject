@@ -1,6 +1,7 @@
-package characterCandidateDitectionProcess;
+package pp;
 
 import java.awt.image.BufferedImage;
+
 
 public class CharacterCandidateDitection {
 
