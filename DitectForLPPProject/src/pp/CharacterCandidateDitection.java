@@ -21,7 +21,7 @@ public class CharacterCandidateDitection {
 
 		h = srcImg.getHeight();
 		w = srcImg.getWidth();
-		
+
 		//文字候補抽出
 		//ベース画像輝度値コピー
 		int bin2d[][] = new int[h][w];
@@ -39,10 +39,18 @@ public class CharacterCandidateDitection {
 				}
 			}
 		}
-		
+
+		//差分画像コピー
+		for(int y = 0; y < h; y++){
+			for(int x = 0; x <w; x++){
+				neoBin2d[y][x] = binDef2d[y][x];
+			}
+		}
+
 		//連結領域消去
 		int T = param.T;
 		for(int i = 0; i < T; i++){
+
 			for(int y = param.mh ; y < h-param.mh; y++){
 				for(int x = param.mh; x < w - param.mh; x++){
 					for(int my = -param.mh; my <= param.mh;my++) {
@@ -50,13 +58,12 @@ public class CharacterCandidateDitection {
 							if(my == 0 && mx == 0)continue;
 							if(binDef2d[y][x] == 0 && bin2d[y][x] == 1){
 								neoBin2d[y+my][x+mx] = 0;
-							}else{
-								neoBin2d[y+my][x+mx] = binDef2d[y+my][x+mx];
 							}
 						}
 					}
 				}
 			}
+
 			for(int y = param.mh ; y < h-param.mh; y++){
 				for(int x = param.mh; x < w - param.mh; x++){
 					bin2d[y][x] = binDef2d[y][x];
