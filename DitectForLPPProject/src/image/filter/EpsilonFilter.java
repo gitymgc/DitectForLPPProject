@@ -1,4 +1,4 @@
-package main;
+package image.filter;
 
 import java.awt.image.BufferedImage;
 

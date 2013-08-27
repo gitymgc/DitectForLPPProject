@@ -1,10 +1,10 @@
 package baseImageCreation;
 
+import image.filter.EpsilonFilter;
 import image.filter.LaplacianFilter;
 
 import java.awt.image.BufferedImage;
 
-import main.EpsilonFilter;
 import characterCandidateDitectionProcess.Parameter;
 
 public class BaseImageCreation {
