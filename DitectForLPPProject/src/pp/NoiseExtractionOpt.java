@@ -40,6 +40,8 @@ public class NoiseExtractionOpt {
 
 		w = srcImg.getWidth();
 		h = srcImg.getHeight();
+		
+		//最大値フィルタと最小値フィルタで輝度値が低い文字部分の溝を埋める
 
 		int max2d[][] = new int[h][w];
 		MaxFilter(src2d,max2d,maxNum);
@@ -63,9 +65,9 @@ public class NoiseExtractionOpt {
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
 				if(lap2d[y][x] > min2d[y][x]){
-					edge2d[y][x] = 1;
-				}else{
 					edge2d[y][x] = 0;
+				}else{
+					edge2d[y][x] = 1;
 				}
 			}
 		}
