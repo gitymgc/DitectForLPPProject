@@ -50,7 +50,7 @@ public class NoiseExtractionOpt {
 		MinFilter(max2d,min2d,minNum);
 		
 		
-		//反転
+		//反転させ、つぶした暗い文字部分以外のエッジを抽出しやすくする。
 		int opt2d[][] = new int[h][w];
 		for(int y = 0; y < h; y++){
 			for(int x = 0; x < w; x++){
