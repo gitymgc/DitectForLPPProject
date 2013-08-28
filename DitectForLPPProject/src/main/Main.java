@@ -19,10 +19,11 @@ import pp.SizeJudge;
 public class Main {
 
 	public static void main(String[] args)throws Exception{
+		
 		new Main().exec();
 	}
 	//パラメータ設定
-	Parameter param = new Parameter(3,15,30,10,15,12,10,3,50,40,5);
+	Parameter param = new Parameter(3,10,30,10,10,7,5,3,50,40,5);
 
 	String srcDirPath = "./debug/src/";
 	String dstDirPath = "./debug/dst/";
@@ -47,23 +48,23 @@ public class Main {
 			//ベース画像作成
 			int binB2d[][] = new int[h][w];
 			BaseImageCreation.exec(param,srcImg, src2d, binB2d);
-			
+
 
 			//ノイズ抽出
 			int lowGra2d[][] = new int[h][w];
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x <w; x++){
-					if((src2d[y][x] -50) > 0){
-						lowGra2d[y][x] = (int)(src2d[y][x] - 50);
+					if((src2d[y][x] -40) > 0){
+						lowGra2d[y][x] = (int)(src2d[y][x] - 40);
 					}else{
 						lowGra2d[y][x] = 0;
 					}
 				}
 			}
+
 			int binN2d[][] = new int[h][w];
-//						NoiseExtractionOpt.exec(param, srcImg, src2d, binN2d);
-			NoiseExtraction.exec(param, srcImg, lowGra2d, binN2d);
-//			NoiseExtraction.exec(param, srcImg, src2d, binN2d);
+			NoiseExtraction.exec(param, srcImg, src2d, binN2d);
+
 
 			//文字候補抽出
 			int neoBin2d[][] = new int[h][w];
@@ -81,6 +82,7 @@ public class Main {
 			int binZ2d[][] = new int[h][w];
 			NoiseElimination.exec(param, srcImg, binY2d, binZ2d);
 
+//			String dstFilePath = dstDirPath + param.T + "回/" + srcFile.getName();
 			String dstFilePath = dstDirPath + srcFile.getName();
 			String dstElem[] = srcFile.getName().split("\\.");
 			File dstFile = new File(dstFilePath);
@@ -90,8 +92,9 @@ public class Main {
 
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
-					dstBuf.setElem(y*w+x, binZ2d[y][x] *255);
-//					dstBuf.setElem(y*w+x, neoBin2d[y][x] *255);
+					dstBuf.setElem(y*w+x, binZ2d[y][x]*255 );
+					//					dstBuf.setElem(y*w+x, lowGra2d[y][x] );
+					//					dstBuf.setElem(y*w+x,(10 < binW2d[y][x] && binW2d[y][x] < 40)?255:0);
 				}
 			}
 			ImageIO.write(dstImg, "bmp", dstFile);
